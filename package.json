@@ -1,0 +1,9 @@
+{
+  "name": "notion-auto-update",
+  "version": "1.0.0",
+  "main": "updateNotion.js",
+  "dependencies": {
+    "@notionhq/client": "^2.2.1",
+    "dotenv": "^16.0.3"
+  }
+} 
