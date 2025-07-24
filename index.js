@@ -13,6 +13,9 @@ const DB_ID = process.env.NOTION_DATABASE_ID || process.env.DATABASE_ID;
 // Notion 자동화 메인 함수 정의 (비동기)
 async function runNotionAutomation() {
   try {
+
+    console.log("📄 NOTION_DATABASE_ID:", process.env.NOTION_DATABASE_ID);
+
     // 데이터베이스에서 모든 페이지(행) 쿼리
     const res = await notion.databases.query({ database_id: DB_ID });
 
