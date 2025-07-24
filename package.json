@@ -1,9 +1,13 @@
 {
-  "name": "notion-auto-update",
+  "name": "notion-webhook-runner",
   "version": "1.0.0",
-  "main": "updateNotion.js",
+  "description": "Notion Webhook 처리 및 GitHub Actions cron 자동화",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
-    "@notionhq/client": "^2.2.1",
-    "dotenv": "^16.0.3"
+    "@notionhq/client": "^2.2.4",
+    "dotenv": "^16.3.1"
   }
-} 
+}
