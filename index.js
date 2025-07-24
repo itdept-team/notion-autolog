@@ -7,8 +7,8 @@ const { Client } = require('@notionhq/client');
 // Notion 클라이언트 인스턴스 생성 (인증 토큰 사용)
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
-// Notion 데이터베이스 ID 환경변수에서 가져오기
-const DB_ID = process.env.NOTION_DATABASE_ID;
+// Notion 데이터베이스 ID 환경변수에서 가져오기 (둘 다 지원)
+const DB_ID = process.env.NOTION_DATABASE_ID || process.env.DATABASE_ID;
 
 // Notion 자동화 메인 함수 정의 (비동기)
 async function runNotionAutomation() {

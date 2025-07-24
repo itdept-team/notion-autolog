@@ -26,3 +26,4 @@ jobs:
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}               # Notion API 인증 토큰(시크릿 값)을 환경 변수로 전달합니다.
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}   # Notion 데이터베이스 ID(시크릿 값)를 환경 변수로 전달합니다.
+          DATABASE_ID: ${{ secrets.DATABASE_ID }}   # Notion 데이터베이스 ID(시크릿 값)를 환경 변수로 전달합니다.
