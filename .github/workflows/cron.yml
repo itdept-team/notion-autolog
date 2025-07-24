@@ -2,7 +2,7 @@ name: Run Notion Webhook Processor  # Notion Webhook 자동화 스크립트 실�
 
 on:
   schedule:
-    - cron: '*/5 0-9 * * 1-5'  # KST 9~18시를 의미 (UTC 0~9시)
+    - cron: '*/5 * * * 1-5'  # 월~금 5분마다 실행
   workflow_dispatch:        # GitHub 웹 UI에서 사용자가 직접 수동으로 워크플로우를 실행할 수 있도록 허용합니다.
 
 jobs:
