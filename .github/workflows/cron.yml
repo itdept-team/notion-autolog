@@ -1,28 +1,28 @@
-name: Run Notion Webhook Processor
+name: Run Notion Webhook Processor  # Notion Webhook 자동화 스크립트 실행 워크플로우
 
 on:
   schedule:
-    - cron: '*/10 * * * *'  # 매 10분마다 실행
-  workflow_dispatch:        # 수동 실행도 허용
+    - cron: '*/5 9-18 * * 1-5'  # 평일(월~금) 9시~18시 사이에 5분마다 워크플로우를 자동 실행합니다.
+  workflow_dispatch:        # GitHub 웹 UI에서 사용자가 직접 수동으로 워크플로우를 실행할 수 있도록 허용합니다.
 
 jobs:
   run-script:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # 워크플로우가 실행될 환경을 최신 Ubuntu로 지정합니다.
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # 현재 저장소의 코드를 체크아웃(가져오기)합니다.
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3  # Node.js 환경을 설정합니다.
         with:
-          node-version: '20'
+          node-version: '20'        # Node.js 20 버전을 사용합니다.
 
       - name: Install dependencies
-        run: npm install
+        run: npm install            # package.json에 명시된 프로젝트 의존성 패키지들을 설치합니다.
 
       - name: Run script
-        run: node index.js
+        run: node index.js          # index.js 파일(메인 자동화 스크립트)을 실행합니다.
         env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }} 
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}               # Notion API 인증 토큰(시크릿 값)을 환경 변수로 전달합니다.
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}   # Notion 데이터베이스 ID(시크릿 값)를 환경 변수로 전달합니다.
