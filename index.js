@@ -21,10 +21,43 @@ async function runNotionAutomation() {
 
     // 각 페이지(행) 순회
     for (const page of res.results) {
+<<<<<<< Updated upstream
       // '보고확인' 체크박스 값 추출 (체크 여부)
       const 확인 = page.properties['보고확인']?.checkbox;
       // '금주/차주 보고내용'의 첫 번째 rich_text 내용 추출
       const 보고내용 = page.properties['금주/차주 보고내용']?.rich_text?.[0]?.text?.content;
+=======
+      // '상태' 속성 확인 (진행중인지  체크)
+      const 상태속성 = page.properties['상태'];
+      let 상태 = null;
+      
+      if (상태속성) {
+        if (상태속성.type === 'status') {
+          // Status 타입 (Notion의 기본 상태 컬럼)
+          상태 = 상태속성.status?.name || null;
+        } else if (상태속성.type === 'select') {
+          // Select 타입 (사용자 정의 선택 컬럼)
+          상태 = 상태속성.select?.name || null;
+        }
+      }
+      
+      const 진행중 = 상태 === '진행 중';
+      
+      // '보고확인' 체크박스 값 추출 (원래 방식으로 복원 - 더 안전하게)
+      const 보고확인속성 = page.properties['보고확인'];
+      const 확인 = 보고확인속성?.type === 'checkbox' ? 보고확인속성.checkbox === true : false;
+      
+      // '금주/차주 보고내용'의 첫 번째 rich_text 내용 추출 (원래 방식으로 복원)
+      const 보고내용속성 = page.properties['금주/차주 보고내용'];
+      let 보고내용 = null;
+      if (보고내용속성?.type === 'rich_text' && 보고내용속성.rich_text && 보고내용속성.rich_text.length > 0) {
+        // rich_text 배열의 모든 항목에서 텍스트 추출 (plain_text 우선, 없으면 text.content)
+        const texts = 보고내용속성.rich_text
+          .map(item => item.plain_text || item.text?.content || '')
+          .filter(text => text && text.trim().length > 0);
+        보고내용 = texts.length > 0 ? texts.join('\n') : null;
+      }
+>>>>>>> Stashed changes
 
       // '보고확인'이 체크되어 있고, '금주/차주 보고내용'이 비어있지 않은 경우에만 처리
       if (확인 && 보고내용) {
