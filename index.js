@@ -16,18 +16,37 @@ async function runNotionAutomation() {
 
     console.log("📄 NOTION_DATABASE_ID:", process.env.NOTION_DATABASE_ID);
 
-    // 데이터베이스에서 모든 페이지(행) 쿼리
-    const res = await notion.databases.query({ database_id: DB_ID });
+    // 데이터베이스에서 상태가 '진행 중'인 페이지(행)만 쿼리
+    const res = await notion.databases.query({ 
+      database_id: DB_ID,
+      filter: {
+        property: '상태',
+        status: {
+          equals: '진행 중'
+        }
+      }
+    });
 
-    // 각 페이지(행)  순회
+    // 각 페이지(행) 순회 (필터에서 이미 '진행 중' 상태만 가져옴)
     for (const page of res.results) {
-      // '보고확인' 체크박스 값 추출 (체크 여부)
-      const 확인 = page.properties['보고확인']?.checkbox;
+      // '보고확인' 체크박스 값 추출
+      const 보고확인속성 = page.properties['보고확인'];
+      const 확인 = 보고확인속성?.type === 'checkbox' ? 보고확인속성.checkbox === true : false;
+      
       // '금주/차주 보고내용'의 첫 번째 rich_text 내용 추출
-      const 보고내용 = page.properties['금주/차주 보고내용']?.rich_text?.[0]?.text?.content;
+      const 보고내용속성 = page.properties['금주/차주 보고내용'];
+      let 보고내용 = null;
+      if (보고내용속성?.type === 'rich_text' && 보고내용속성.rich_text && 보고내용속성.rich_text.length > 0) {
+        // rich_text 배열의 모든 항목에서 텍스트 추출 (plain_text 우선, 없으면 text.content)
+        const texts = 보고내용속성.rich_text
+          .map(item => item.plain_text || item.text?.content || '')
+          .filter(text => text && text.trim().length > 0);
+        보고내용 = texts.length > 0 ? texts.join('\n') : null;
+      }
 
       // '보고확인'이 체크되어 있고, '금주/차주 보고내용'이 비어있지 않은 경우에만 처리
-      if (확인 && 보고내용) {
+      // (필터에서 이미 '진행 중' 상태만 가져오므로 상태 확인 불필요)
+      if (확인 === true && 보고내용) {
         // 현재 날짜를 "YYYY년 MM월 DD일" 형식으로 포맷
         const now = new Date();
         const today = `${now.getFullYear()}년 ${String(now.getMonth()+1).padStart(2, '0')}월 ${String(now.getDate()).padStart(2, '0')}일`;
